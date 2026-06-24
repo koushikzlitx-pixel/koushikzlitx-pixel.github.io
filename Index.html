@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Koushik Sriram. Data & AI Analyst | AI Engineer. GenAI/RAG pipelines, ML systems, AWS, forecasting, Tableau dashboards.">
+<title>Koushik Sriram · Data & AI Analyst | AI Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+<style>
+:root{
+  --bg:#050508;--bg1:#090910;--bg2:#0f0f1a;
+  --line:rgba(255,255,255,0.07);--line2:rgba(255,255,255,0.13);
+  --t1:#ededfa;--t2:#9090b4;--t3:#52527a;
+  --v:#7c5cff;--c:#22d3ee;--p:#f472b6;--g:#34d399;--a:#fbbf24;--r:#f87171;
+  --grad:linear-gradient(135deg,#7c5cff,#22d3ee,#f472b6);
+  --grad2:linear-gradient(135deg,#7c5cff,#22d3ee);
+  --gradt:linear-gradient(120deg,#a78bfa,#22d3ee,#f472b6);
+  --ease:cubic-bezier(.22,1,.36,1);--rr:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;background:var(--bg);}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1);overflow-x:hidden;cursor:none;}
+::selection{background:var(--v);color:#fff;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--v);border-radius:5px;}
+
+/* CURSOR */
+.cd,.cr{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);border-radius:50%;}
+.cd{width:5px;height:5px;background:#fff;mix-blend-mode:difference;}
+.cr{width:30px;height:30px;border:1.5px solid rgba(255,255,255,.35);transition:width .22s,height .22s,border-color .22s;}
+.cr.hov{width:54px;height:54px;border-color:var(--c);background:rgba(34,211,238,.05);}
+@media(max-width:900px){body{cursor:auto;}.cd,.cr{display:none;}}
+
+/* NOISE + GRID */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");opacity:.35;pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.016) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.016) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 0%,transparent 100%);pointer-events:none;z-index:0;}
+
+/* SCROLL BAR */
+.sbar{position:fixed;top:0;left:0;height:3px;width:0%;background:var(--grad);z-index:9998;box-shadow:0 0 12px rgba(124,92,255,.7);}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:1.1rem 0;transition:.3s var(--ease);}
+nav.sc{background:rgba(5,5,8,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);padding:.65rem 0;}
+.ni{max-width:1300px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'JetBrains Mono',monospace;font-size:.95rem;font-weight:600;color:var(--t1);text-decoration:none;display:flex;align-items:center;gap:.35rem;}
+.lb{color:var(--c);}
+.ld{width:6px;height:6px;background:var(--g);border-radius:50%;animation:bk 2s infinite;}
+@keyframes bk{0%,100%{opacity:1}50%{opacity:.15}}
+.nl{display:flex;gap:1.8rem;list-style:none;}
+.nl a{color:var(--t3);text-decoration:none;font-size:.8rem;font-weight:500;letter-spacing:.05em;transition:.2s;position:relative;}
+.nl a::after{content:'';position:absolute;left:0;bottom:-4px;width:0;height:1px;background:var(--c);transition:.25s;}
+.nl a:hover{color:var(--t1);}
+.nl a:hover::after,.nl a.on::after{width:100%;}
+.nl a.on{color:var(--t1);}
+.hm{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+.hm span{width:22px;height:1.5px;background:var(--t1);transition:.3s;}
+
+/* RAILS */
+.rl{position:fixed;bottom:0;z-index:50;display:flex;flex-direction:column;align-items:center;gap:.85rem;}
+.rll{left:26px;}.rlr{right:26px;}
+.rl a{color:var(--t3);font-size:.88rem;transition:.2s;text-decoration:none;}
+.rl a:hover{color:var(--c);transform:translateY(-3px);}
+.rline{width:1px;height:90px;background:linear-gradient(to bottom,transparent,var(--t3));}
+.rtxt{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t3);writing-mode:vertical-rl;letter-spacing:.14em;}
+@media(max-width:1100px){.rl{display:none;}}
+
+/* ===== HERO ===== */
+.hero{min-height:100vh;display:grid;grid-template-columns:55% 45%;position:relative;z-index:2;}
+.hero-l{display:flex;flex-direction:column;justify-content:center;padding:8.5rem 3.5rem 6rem 5rem;border-right:1px solid var(--line);position:relative;}
+.hero-l::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 15% 45%,rgba(124,92,255,.13),transparent 70%);pointer-events:none;}
+.apill{display:inline-flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--g);border:1px solid rgba(52,211,153,.25);background:rgba(52,211,153,.05);padding:.32rem .8rem;border-radius:100px;margin-bottom:2rem;width:fit-content;}
+.adot{width:7px;height:7px;background:var(--g);border-radius:50%;animation:pg 2s infinite;box-shadow:0 0 10px var(--g);}
+@keyframes pg{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.4}}
+.hname{font-family:'Space Grotesk',sans-serif;font-size:clamp(3.2rem,5.5vw,5.5rem);font-weight:800;line-height:.93;letter-spacing:-.04em;margin-bottom:1.5rem;}
+.hname span{display:block;}
+.hname .gt{background:var(--gradt);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hrole{font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--c);margin-bottom:1.4rem;display:flex;align-items:center;gap:.5rem;min-height:1.5em;}
+.tcur{color:var(--p);animation:bk .9s steps(2) infinite;}
+.hdesc{color:var(--t2);font-size:.97rem;line-height:1.75;max-width:470px;margin-bottom:2.2rem;}
+.hdesc strong{color:var(--t1);}
+.ti{background:rgba(124,92,255,.1);border:1px solid rgba(124,92,255,.25);color:var(--t1);padding:.1rem .45rem;border-radius:5px;font-size:.86em;}
+.hbtns{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:2.6rem;}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 1.5rem;border-radius:10px;font-size:.88rem;font-weight:500;text-decoration:none;transition:.3s var(--ease);cursor:pointer;border:none;font-family:inherit;}
+.bgrd{background:var(--grad);color:#fff;box-shadow:0 6px 22px -6px rgba(124,92,255,.6);}
+.bgrd:hover{transform:translateY(-2px);box-shadow:0 14px 30px -6px rgba(124,92,255,.8);}
+.bgh{background:transparent;color:var(--t1);border:1px solid var(--line2);}
+.bgh:hover{border-color:var(--c);color:var(--c);background:rgba(34,211,238,.04);}
+.hst{display:flex;gap:2.2rem;padding-top:2rem;border-top:1px solid var(--line);flex-wrap:wrap;}
+.hsv{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;background:var(--gradt);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;}
+.hsl{font-size:.68rem;color:var(--t3);margin-top:.28rem;text-transform:uppercase;letter-spacing:.08em;}
+
+/* HERO RIGHT */
+.hero-r{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:8.5rem 2.5rem 6rem;gap:1.2rem;background:var(--bg1);position:relative;}
+.hero-r::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 45% at 85% 25%,rgba(34,211,238,.07),transparent 70%);pointer-events:none;}
+.term{width:100%;max-width:480px;background:rgba(8,8,14,.96);border:1px solid var(--line2);border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:.78rem;overflow:hidden;box-shadow:0 28px 70px -20px rgba(0,0,0,.8);position:relative;z-index:2;}
+.tbar{display:flex;align-items:center;gap:.45rem;padding:.65rem .9rem;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02);}
+.tdot{width:10px;height:10px;border-radius:50%;}
+.tdot:nth-child(1){background:#ff5f57}.tdot:nth-child(2){background:#febc2e}.tdot:nth-child(3){background:#28c840}
+.tfile{margin-left:auto;font-size:.65rem;color:var(--t3);}
+.tbody{padding:1.1rem 1.3rem;line-height:1.95;}
+.tl{display:block;}
+.tp{color:var(--g)}.tc{color:var(--c)}.to{color:var(--t2)}.tk{color:#c084fc}.tv{color:var(--a)}.ts{color:var(--g)}.tco{color:var(--t3)}.ta{color:var(--p)}.te{color:var(--r)}
+.tcline::after{content:'█';animation:bk .9s steps(2) infinite;color:var(--c);}
+.hbento{width:100%;max-width:480px;display:grid;grid-template-columns:1fr 1fr;gap:.8rem;position:relative;z-index:2;}
+.hbc{background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:10px;padding:.9rem 1rem;transition:.25s var(--ease);}
+.hbc:hover{border-color:rgba(124,92,255,.35);background:rgba(124,92,255,.04);}
+.hbl{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem;}
+.hbv{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;background:var(--gradt);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;}
+.hbs{font-size:.72rem;color:var(--t3);margin-top:.22rem;}
+
+/* ===== SECTION BASE ===== */
+section{padding:8rem 0 5rem;position:relative;z-index:2;}
+.wrap{max-width:1300px;margin:0 auto;padding:0 2rem;}
+.stag{display:inline-flex;align-items:center;gap:.45rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--c);border:1px solid rgba(34,211,238,.2);background:rgba(34,211,238,.04);padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem;letter-spacing:.1em;text-transform:uppercase;}
+.stitle{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.9rem,3.8vw,3rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:.9rem;}
+.gt{background:var(--gradt);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.ssub{color:var(--t2);font-size:.97rem;max-width:560px;line-height:1.65;}
+.rev{opacity:0;transform:translateY(26px);transition:opacity .75s var(--ease),transform .75s var(--ease);}
+.rev.in{opacity:1;transform:none;}
+
+/* ===== METRIC CHIPS — pulled-out standout numbers ===== */
+.mchip{
+  display:inline-flex;align-items:baseline;gap:.3rem;
+  font-family:'Space Grotesk',sans-serif;font-weight:700;
+  padding:.08rem .1rem;
+  background:linear-gradient(120deg,#a78bfa,#22d3ee);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  font-size:1.08em;
+  white-space:nowrap;
+}
+.mstrip{
+  display:flex;flex-wrap:wrap;gap:.6rem;
+  margin:1.1rem 0;
+}
+.mbadge{
+  display:flex;flex-direction:column;align-items:flex-start;
+  background:rgba(124,92,255,.07);
+  border:1px solid rgba(124,92,255,.22);
+  border-radius:10px;
+  padding:.55rem .85rem;
+  min-width:84px;
+  transition:.25s var(--ease);
+}
+.mbadge:hover{border-color:rgba(34,211,238,.45);background:rgba(34,211,238,.06);transform:translateY(-2px);}
+.mbadge .mv{
+  font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:700;line-height:1;
+  background:var(--gradt);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.mbadge .ml{
+  font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);
+  text-transform:uppercase;letter-spacing:.06em;margin-top:.3rem;line-height:1.3;
+}
+.mbadge.warn .mv{background:linear-gradient(120deg,#fbbf24,#f87171);-webkit-background-clip:text;background-clip:text;}
+.mbadge.cool .mv{background:linear-gradient(120deg,#22d3ee,#34d399);-webkit-background-clip:text;background-clip:text;}
+.mbadge.hot .mv{background:linear-gradient(120deg,#f472b6,#7c5cff);-webkit-background-clip:text;background-clip:text;}
+
+/* per-bullet inline metric row inside commit bullets */
+.cbl li .mchip{font-size:1.05em;}
+
+/* ===== ABOUT ===== */
+#about{background:var(--bg1);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.asplit{display:grid;grid-template-columns:3fr 2fr;gap:4rem;align-items:start;}
+.alead{font-size:1.15rem;line-height:1.65;color:var(--t1);margin-bottom:1.3rem;font-weight:400;}
+.abody{color:var(--t2);font-size:.95rem;line-height:1.72;margin-bottom:.9rem;}
+.abody strong,.hl{color:var(--t1);font-weight:500;}
+.hlc{color:var(--c);}
+.kwrow{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.6rem;}
+.kw{font-family:'JetBrains Mono',monospace;font-size:.71rem;color:var(--t2);padding:.28rem .65rem;border:1px solid var(--line2);border-radius:100px;background:rgba(255,255,255,.02);transition:.2s;}
+.kw:hover{color:var(--c);border-color:var(--c);transform:translateY(-2px);}
+.idc{background:linear-gradient(135deg,rgba(124,92,255,.08),rgba(34,211,238,.04));border:1px solid var(--line2);border-radius:18px;padding:1.5rem;position:sticky;top:110px;backdrop-filter:blur(14px);}
+.idtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.3rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;}
+.idchip{display:flex;align-items:center;gap:.45rem;color:var(--t2);border:1px solid var(--line2);padding:.28rem .6rem;border-radius:100px;}
+.icdot{width:5px;height:5px;background:var(--g);border-radius:50%;animation:pg 2s infinite;}
+.idst{color:var(--g);letter-spacing:.15em;}
+.idav{display:flex;justify-content:center;margin:1rem 0 1.4rem;}
+.avo{width:84px;height:84px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:#fff;box-shadow:0 0 38px rgba(124,92,255,.4);}
+.idrows{display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.3rem;}
+.idr{display:flex;justify-content:space-between;padding-bottom:.5rem;border-bottom:1px dashed var(--line);font-size:.8rem;}
+.idr span{color:var(--t3);font-family:'JetBrains Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;}
+.idr strong{color:var(--t1);font-weight:500;text-align:right;max-width:60%;}
+.idbars{display:flex;flex-direction:column;gap:.75rem;}
+.iblbl{font-size:.76rem;color:var(--t2);margin-bottom:.28rem;display:block;}
+.ibtr{width:100%;height:4px;background:rgba(255,255,255,.05);border-radius:100px;overflow:hidden;}
+.ibf{height:100%;width:0;background:var(--grad2);border-radius:100px;transition:width 1.4s var(--ease);}
+.ibtr.go .ibf{width:var(--w);}
+
+/* ===== METRICS — BENTO ===== */
+#metrics{background:var(--bg);}
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;}
+.bc{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--rr);padding:1.3rem;backdrop-filter:blur(14px);transition:.3s var(--ease);position:relative;overflow:hidden;}
+.bc::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(124,92,255,.1),transparent 45%);opacity:0;transition:.35s;pointer-events:none;}
+.bc:hover::before{opacity:1;}
+.bc:hover{border-color:rgba(124,92,255,.3);transform:translateY(-3px);}
+.bca{grid-column:span 2;grid-row:span 2;}
+.bcb{grid-column:span 2;}
+.bcc{grid-column:span 2;}
+.bcd{grid-column:span 4;}
+.bce{grid-column:span 2;}
+.bclbl{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem;display:flex;justify-content:space-between;align-items:center;}
+.lbdg{display:inline-flex;align-items:center;gap:.32rem;font-size:.6rem;color:var(--p);border:1px solid rgba(244,114,182,.3);background:rgba(244,114,182,.06);padding:.18rem .48rem;border-radius:100px;}
+.lbdg span{width:5px;height:5px;background:var(--p);border-radius:50%;animation:pg 1.5s infinite;}
+.bc canvas{max-height:210px;}
+.bca canvas{max-height:300px;}
+.kpig{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;}
+.kpib{background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:10px;padding:.75rem;transition:.2s;}
+.kpib:hover{border-color:var(--c);}
+.kpiv{font-family:'Space Grotesk',sans-serif;font-size:1.85rem;font-weight:700;background:var(--gradt);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;filter:drop-shadow(0 0 14px rgba(124,92,255,.35));}
+.kpil{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.28rem;letter-spacing:.06em;}
+
+/* ===== EXPERIENCE — COMMIT LOG ===== */
+#experience{background:var(--bg1);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.clog{display:flex;flex-direction:column;gap:0;margin-top:2.8rem;}
+.cm{display:grid;grid-template-columns:190px 1fr;gap:0;position:relative;}
+.cmt{padding:1.8rem 1.8rem 1.8rem 0;text-align:right;position:relative;}
+.cmt::after{content:'';position:absolute;right:-7px;top:2.4rem;width:13px;height:13px;border-radius:50%;background:var(--bg1);border:2px solid var(--c);box-shadow:0 0 14px rgba(34,211,238,.5);z-index:2;}
+.cmt::before{content:'';position:absolute;right:5px;top:0;width:2px;height:100%;background:var(--line);}
+.cm:last-child .cmt::before{background:linear-gradient(to bottom,var(--line),transparent);height:50%;}
+.ctd{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:var(--c);font-weight:600;margin-bottom:.25rem;}
+.cto{font-size:.76rem;color:var(--t3);}
+.cmb{padding:1.5rem 0 1.5rem 1.8rem;border-left:2px solid var(--line);}
+.cmc{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--rr);padding:1.5rem 1.7rem;transition:.3s var(--ease);}
+.cmc:hover{border-color:rgba(124,92,255,.35);transform:translateX(5px);}
+.chsh{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t3);margin-bottom:.55rem;display:flex;align-items:center;gap:.4rem;}
+.chsh::before{content:'commit';color:var(--a);margin-right:.25rem;}
+.cht{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:600;margin-bottom:.22rem;}
+.chs{color:var(--c);font-size:.86rem;margin-bottom:.9rem;}
+.cbl{list-style:none;margin-bottom:.9rem;}
+.cbl li{color:var(--t2);font-size:.88rem;line-height:1.6;padding:.28rem 0 .28rem 1.3rem;position:relative;border-bottom:1px solid rgba(255,255,255,.03);}
+.cbl li:last-child{border-bottom:none;}
+.cbl li::before{content:'→';position:absolute;left:0;color:var(--c);}
+.cbl li strong{color:var(--t1);}
+.ctags{display:flex;flex-wrap:wrap;gap:.35rem;}
+.ctag{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t2);padding:.18rem .55rem;background:rgba(124,92,255,.07);border:1px solid rgba(124,92,255,.18);border-radius:100px;}
+
+/* ===== SKILLS ===== */
+#skills{background:var(--bg);}
+.sklayout{display:grid;grid-template-columns:360px 1fr;gap:2.5rem;align-items:start;}
+.rwrap{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--rr);padding:1.5rem;position:sticky;top:110px;}
+.rlbl{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.9rem;}
+.rwrap canvas{max-height:310px;}
+.skrc{display:flex;flex-direction:column;gap:1.5rem;}
+.skg{background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:var(--rr);padding:1.3rem;transition:.25s;}
+.skg:hover{border-color:rgba(34,211,238,.2);}
+.sgh{display:flex;align-items:center;gap:.75rem;margin-bottom:.9rem;}
+.sgic{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,rgba(124,92,255,.2),rgba(34,211,238,.1));display:flex;align-items:center;justify-content:center;color:var(--c);font-size:.85rem;flex-shrink:0;}
+.sgn{font-family:'Space Grotesk',sans-serif;font-size:.92rem;font-weight:600;}
+.sgbw{margin-bottom:.85rem;}
+.sgbl{display:flex;justify-content:space-between;font-size:.76rem;color:var(--t2);margin-bottom:.35rem;}
+.sgbp{font-family:'JetBrains Mono',monospace;color:var(--c);font-weight:700;font-size:.92rem;}
+.sgb{height:5px;background:rgba(255,255,255,.05);border-radius:100px;overflow:hidden;}
+.sgbf{height:100%;width:0;background:var(--grad2);border-radius:100px;transition:width 1.5s var(--ease);}
+.sgtags{display:flex;flex-wrap:wrap;gap:.35rem;}
+.sgt{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);padding:.2rem .5rem;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;transition:.2s;}
+.sgt:hover{color:var(--c);border-color:rgba(34,211,238,.3);}
+.crts{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-top:2.5rem;}
+.crtc{background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:var(--rr);padding:1rem 1.2rem;transition:.25s var(--ease);}
+.crtc:hover{border-color:var(--a);transform:translateY(-3px);}
+.crtic{color:var(--a);font-size:1.15rem;margin-bottom:.55rem;filter:drop-shadow(0 0 8px rgba(251,191,36,.4));}
+.crtn{font-size:.83rem;font-weight:500;color:var(--t1);margin-bottom:.28rem;}
+.crtd{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);}
+
+/* ===== PROJECTS — MAGAZINE ===== */
+#projects{background:var(--bg1);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.frow{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:2.2rem;}
+.fb{padding:.42rem 1rem;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.73rem;border:1px solid var(--line2);background:transparent;color:var(--t2);cursor:pointer;transition:.2s;}
+.fb:hover{color:var(--t1);border-color:var(--t2);}
+.fb.on{background:var(--v);border-color:var(--v);color:#fff;}
+.mgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem;}
+.pc{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--rr);padding:1.5rem;transition:.35s var(--ease);position:relative;overflow:hidden;display:flex;flex-direction:column;gap:.75rem;}
+.pc.hide{display:none;}
+.pc:hover{border-color:rgba(124,92,255,.35);transform:translateY(-5px);box-shadow:0 22px 55px -20px rgba(124,92,255,.4);}
+/* sizing */
+.pc1{grid-column:span 5;}.pc2{grid-column:span 7;}.pc3{grid-column:span 4;}.pc4{grid-column:span 4;}.pc5{grid-column:span 4;}.pc6{grid-column:span 12;}
+.pcac{position:absolute;top:0;left:0;right:0;height:3px;}
+.pcac1{background:linear-gradient(90deg,var(--v),var(--c));}
+.pcac2{background:linear-gradient(90deg,var(--c),var(--g));}
+.pcac3{background:linear-gradient(90deg,var(--g),var(--a));}
+.pcac4{background:linear-gradient(90deg,var(--a),var(--p));}
+.pcac5{background:linear-gradient(90deg,var(--p),var(--v));}
+.pcac6{background:linear-gradient(90deg,var(--v),var(--c),var(--p));}
+.pch{display:flex;justify-content:space-between;align-items:flex-start;}
+.pcic{width:40px;height:40px;border-radius:10px;background:rgba(124,92,255,.12);border:1px solid rgba(124,92,255,.2);display:flex;align-items:center;justify-content:center;color:var(--c);font-size:.95rem;flex-shrink:0;}
+.pcd{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;}
+.wip{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--a);border:1px solid rgba(251,191,36,.3);background:rgba(251,191,36,.07);padding:.16rem .48rem;border-radius:100px;display:inline-flex;align-items:center;gap:.28rem;}
+.wipd{width:4px;height:4px;background:var(--a);border-radius:50%;animation:pg 1.5s infinite;}
+.pc h3{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;line-height:1.3;color:var(--t1);}
+.pc p{font-size:.85rem;color:var(--t2);line-height:1.65;flex:1;}
+.pc p strong{color:var(--t1);}
+.pc p code{font-family:'JetBrains Mono',monospace;font-size:.82em;background:rgba(124,92,255,.12);padding:.08rem .38rem;border-radius:4px;color:var(--c);}
+.pcm{display:flex;gap:1.3rem;padding-top:.55rem;border-top:1px dashed var(--line);}
+.pcm div{display:flex;flex-direction:column;gap:2px;}
+.pcmv{font-family:'Space Grotesk',sans-serif;font-size:1.32rem;font-weight:700;background:var(--gradt);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;filter:drop-shadow(0 0 10px rgba(124,92,255,.3));}
+.pcml{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;}
+.pct{display:flex;flex-wrap:wrap;gap:.32rem;}
+.pctt{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);padding:.18rem .48rem;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:5px;}
+
+/* PUBS */
+.pubsec{margin-top:4.5rem;}
+.pubs{display:flex;flex-direction:column;gap:.9rem;margin-top:1.8rem;}
+.pub{display:flex;align-items:flex-start;gap:1.4rem;background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--rr);padding:1.5rem 1.7rem;transition:.3s var(--ease);}
+.pub:hover{border-color:rgba(124,92,255,.35);transform:translateX(5px);}
+.pnum{font-family:'JetBrains Mono',monospace;font-size:1.05rem;color:var(--c);font-weight:600;white-space:nowrap;}
+.pbdy{flex:1;}
+.ptit{font-family:'Space Grotesk',sans-serif;font-size:.97rem;font-weight:600;color:var(--t1);margin-bottom:.4rem;line-height:1.4;}
+.pau{font-size:.81rem;color:var(--c);margin-bottom:.22rem;}
+.pven{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t3);}
+.pbdg{font-family:'JetBrains Mono',monospace;font-size:.63rem;padding:.26rem .65rem;border-radius:100px;white-space:nowrap;align-self:flex-start;letter-spacing:.08em;text-transform:uppercase;}
+.bdgr{color:var(--a);border:1px solid rgba(251,191,36,.3);background:rgba(251,191,36,.07);}
+.bdgp{color:var(--g);border:1px solid rgba(52,211,153,.3);background:rgba(52,211,153,.07);}
+
+/* ===== CONTACT ===== */
+#contact{background:var(--bg1);border-top:1px solid var(--line);}
+.ctsplit{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:center;}
+.ctl p{color:var(--t2);font-size:.97rem;line-height:1.7;margin:1rem 0 1.8rem;}
+.ctr{display:flex;flex-direction:column;gap:.85rem;}
+.ctile{display:flex;align-items:center;gap:1.1rem;background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--rr);padding:1.1rem 1.3rem;text-decoration:none;color:inherit;transition:.3s var(--ease);}
+.ctile:hover{border-color:var(--c);transform:translateX(6px);background:rgba(34,211,238,.04);}
+.ctico{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--v),var(--c));display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.05rem;flex-shrink:0;}
+.ctlbl{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;}
+.ctval{font-size:.93rem;color:var(--t1);font-weight:500;margin-top:.18rem;}
+.ctarr{margin-left:auto;color:var(--t3);transition:.22s;}
+.ctile:hover .ctarr{color:var(--c);transform:translate(3px,-3px);}
+
+footer{padding:2.2rem 0;border-top:1px solid var(--line);position:relative;z-index:2;}
+.fi{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.fbr{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--t3);}
+.fbr strong{color:var(--c);}
+.fsc{display:flex;gap:.65rem;}
+.fsc a{width:34px;height:34px;border-radius:50%;border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;color:var(--t2);text-decoration:none;transition:.25s;}
+.fsc a:hover{background:var(--grad);border-color:transparent;color:#fff;transform:translateY(-3px);}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .hero{grid-template-columns:1fr;min-height:auto;}
+  .hero-l{padding:7.5rem 2rem 3rem;border-right:none;border-bottom:1px solid var(--line);}
+  .hero-r{padding:2.5rem 2rem 5rem;}
+  .asplit{grid-template-columns:1fr;}
+  .sklayout{grid-template-columns:1fr;}
+  .rwrap{position:static;}
+  .bento{grid-template-columns:repeat(2,1fr);}
+  .bca,.bcb,.bcc,.bcd,.bce{grid-column:span 2;}
+  .mgrid{grid-template-columns:repeat(2,1fr);}
+  .pc1,.pc2,.pc3,.pc4,.pc5{grid-column:span 1;}
+  .pc6{grid-column:span 2;}
+  .ctsplit{grid-template-columns:1fr;}
+  .crts{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:768px){
+  .hero-l{padding:6.5rem 1.3rem 2.5rem;}
+  .hero-r{padding:2rem 1.3rem 4rem;}
+  .nl{position:fixed;top:0;right:-100%;width:255px;height:100vh;flex-direction:column;justify-content:center;gap:2rem;background:rgba(5,5,8,.97);backdrop-filter:blur(20px);border-left:1px solid var(--line);transition:right .32s var(--ease);}
+  .nl.open{right:0;}
+  .hm{display:flex;}
+  .cm{grid-template-columns:1fr;}
+  .cmt{text-align:left;padding:1.2rem 0 0;}
+  .cmt::after,.cmt::before{display:none;}
+  .cmb{padding:.9rem 0 1.2rem;border-left:none;border-top:1px dashed var(--line);}
+  .bento{grid-template-columns:1fr;}
+  .bca,.bcb,.bcc,.bcd,.bce{grid-column:span 1;}
+  .mgrid{grid-template-columns:1fr;}
+  .pc1,.pc2,.pc3,.pc4,.pc5,.pc6{grid-column:span 1;}
+  .rmg{grid-template-columns:1fr;}
+  .hbento{grid-template-columns:1fr 1fr;}
+  .crts{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="cd"></div>
+<div class="cr" id="cr"></div>
+<div class="sbar" id="sbar"></div>
+
+<nav id="nav">
+  <div class="ni">
+    <a href="#home" class="logo"><span class="lb">&lt;</span>KS<span class="lb">/&gt;</span><span class="ld"></span></a>
+    <ul class="nl" id="nl">
+      <li><a href="#home" class="on">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#metrics">Metrics</a></li>
+      <li><a href="#experience">Journey</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="hm" id="hm"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<div class="rl rll">
+  <a href="https://linkedin.com/in/koushik-sriram-184276182" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+  <a href="https://github.com/YOUR_USERNAME" target="_blank"><i class="fab fa-github"></i></a>
+  <a href="mailto:koushikzlitx@gmail.com"><i class="fas fa-envelope"></i></a>
+  <div class="rline"></div>
+</div>
+<div class="rl rlr">
+  <div class="rtxt">koushikzlitx@gmail.com</div>
+  <div class="rline"></div>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<section id="home" style="padding:0;z-index:2;position:relative;">
+<div class="hero">
+  <div class="hero-l">
+    <div class="apill rev"><span class="adot"></span>Open to Data &amp; AI Analyst / AI Engineer roles · DFW + Remote</div>
+    <h1 class="hname rev">
+      <span>Koushik</span>
+      <span class="gt">Sriram.</span>
+    </h1>
+    <div class="hrole rev">
+      <span style="color:var(--t3)">//</span>
+      <span id="typed"></span><span class="tcur">|</span>
+    </div>
+    <p class="hdesc rev">
+      I turn messy data into things people can actually use — <strong>SQL, EDA, hypothesis testing, Tableau dashboards</strong>.
+      On the engineering side: <span class="ti">GenAI / RAG</span>, <span class="ti">ML pipelines</span>, and <span class="ti">MLOps on AWS</span>
+      with Docker, Kubernetes, and MLflow.
+    </p>
+    <div class="hbtns rev">
+      <a href="#projects" class="btn bgrd"><span>View Work</span><i class="fas fa-arrow-right"></i></a>
+      <a href="#contact"  class="btn bgh"><span>Get In Touch</span></a>
+    </div>
+    <div class="hst rev">
+      <div><div class="hsv" data-count="4">0</div><div class="hsl">Yrs Exp</div></div>
+      <div><div class="hsv" data-count="70" data-suffix="%">0</div><div class="hsl">Deploy Failures ↓</div></div>
+      <div><div class="hsv" data-count="15" data-suffix="min">0</div><div class="hsl">Reproduce Any Run</div></div>
+      <div><div class="hsv" data-count="2">0</div><div class="hsl">Papers</div></div>
+    </div>
+  </div>
+
+  <div class="hero-r">
+    <div class="term rev">
+      <div class="tbar">
+        <div class="tdot"></div><div class="tdot"></div><div class="tdot"></div>
+        <span class="tfile">~/koushik/profile.py</span>
+      </div>
+      <div class="tbody">
+        <span class="tl"><span class="tp">$</span> <span class="tc">python</span> profile.py</span>
+        <span class="tl">&nbsp;</span>
+        <span class="tl"><span class="tk">class</span> <span class="tc">Koushik</span>:</span>
+        <span class="tl">&nbsp;&nbsp;<span class="tk">name</span>    = <span class="ts">"Koushik Sriram"</span></span>
+        <span class="tl">&nbsp;&nbsp;<span class="tk">role</span>    = <span class="ts">"Data &amp; AI Analyst | AI Engineer"</span></span>
+        <span class="tl">&nbsp;&nbsp;<span class="tk">location</span>= <span class="ts">"Denton, TX"</span></span>
+        <span class="tl">&nbsp;&nbsp;<span class="tk">current</span> = <span class="ts">"AI Engineer @ Nexacode"</span></span>
+        <span class="tl">&nbsp;&nbsp;<span class="tk">stack</span>   = [<span class="ts">"Python"</span>, <span class="ts">"SQL"</span>, <span class="ts">"LangChain"</span>, <span class="ts">"AWS"</span>]</span>
+        <span class="tl">&nbsp;&nbsp;<span class="tk">degree</span>  = <span class="ts">"M.S. Data Science · UNT"</span></span>
+        <span class="tl">&nbsp;&nbsp;<span class="tk">papers</span>  = <span class="tv">2</span>  <span class="tco"># co-authored &amp; published</span></span>
+        <span class="tl">&nbsp;&nbsp;<span class="tk">open_to</span> = <span class="ts">"DFW + Remote"</span></span>
+        <span class="tl">&nbsp;</span>
+        <span class="tl">&nbsp;&nbsp;<span class="tk">def</span> <span class="ta">ship</span>(self) -&gt; <span class="tc">bool</span>:</span>
+        <span class="tl">&nbsp;&nbsp;&nbsp;&nbsp;<span class="tk">return</span> <span class="tv">True</span>  <span class="tco"># always</span></span>
+        <span class="tl">&nbsp;</span>
+        <span class="tcline"><span class="tp">$</span> </span>
+      </div>
+    </div>
+    <div class="hbento rev">
+      <div class="hbc"><div class="hbl">ETL Throughput</div><div class="hbv">500K+</div><div class="hbs">records / run · 6 sources</div></div>
+      <div class="hbc"><div class="hbl">Deploy Time</div><div class="hbv">3d→4h</div><div class="hbs">per release cycle</div></div>
+      <div class="hbc"><div class="hbl">EHR Records</div><div class="hbv">1M+</div><div class="hbs">PatientSimRAG</div></div>
+      <div class="hbc"><div class="hbl">Mobile Risk</div><div class="hbv">4×</div><div class="hbs">cybersecurity paper</div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===================== ABOUT ===================== -->
+<section id="about">
+<div class="wrap">
+  <div class="asplit">
+    <div>
+      <div class="stag rev"><i class="fas fa-user" style="font-size:.68rem;"></i>&nbsp;02 / About</div>
+      <h2 class="stitle rev">Data &amp; AI work that<br><span class="gt">ships, not just notebooks.</span></h2>
+      <p class="alead rev">Data &amp; AI Analyst / AI Engineer who turns messy data into things people can actually use.</p>
+      <p class="abody rev">On the <span class="hlc">analysis side</span>: SQL queries, EDA, hypothesis testing, dashboards in <strong>Tableau</strong> and Streamlit. On the <span class="hlc">engineering side</span>: building and deploying ML and GenAI tools (PyTorch, XGBoost, BiLSTM, LangChain/RAG) with Python, FastAPI, and AWS — using MLflow, Docker, and Kubernetes to keep things reproducible.</p>
+      <p class="abody rev">Currently shipping AI systems at <span class="hlc">Nexacode</span>: ETL pipelines handling <span class="mchip">500K+</span> records, ML pipelines on AWS cutting deployment time from <span class="mchip">3d→4h</span>, and CloudWatch monitoring that reduced drift MTTR by <span class="mchip">60%</span>. Previously delivered enterprise automation for <span class="hlc">Pfizer</span> and <span class="hlc">Bank of America</span> at Accenture. Co-authored two peer-reviewed papers.</p>
+      <div class="mstrip rev">
+        <div class="mbadge"><span class="mv">40%</span><span class="ml">ETL Prep Time ↓</span></div>
+        <div class="mbadge warn"><span class="mv">70%</span><span class="ml">Deploy Failures ↓</span></div>
+        <div class="mbadge cool"><span class="mv">15min</span><span class="ml">Reproduce Any Run</span></div>
+        <div class="mbadge hot"><span class="mv">60%</span><span class="ml">Drift MTTR ↓</span></div>
+        <div class="mbadge"><span class="mv">12+</span><span class="ml">Models Tracked</span></div>
+      </div>
+      <div class="kwrow rev">
+        <span class="kw">#GenAI</span><span class="kw">#RAGPipelines</span><span class="kw">#MLOps</span>
+        <span class="kw">#Forecasting</span><span class="kw">#NLP</span><span class="kw">#Tableau</span>
+        <span class="kw">#AWS</span><span class="kw">#Python</span><span class="kw">#SQL</span>
+      </div>
+    </div>
+    <div>
+      <div class="idc rev">
+        <div class="idtop">
+          <div class="idchip"><span class="icdot"></span>ID.KS_2026</div>
+          <div class="idst">ACTIVE</div>
+        </div>
+        <div class="idav"><div class="avo">KS</div></div>
+        <div class="idrows">
+          <div class="idr"><span>Name</span><strong>Koushik Sriram</strong></div>
+          <div class="idr"><span>Role</span><strong>Data &amp; AI Analyst / AI Eng</strong></div>
+          <div class="idr"><span>Base</span><strong>Denton, TX</strong></div>
+          <div class="idr"><span>Degree</span><strong>M.S. Data Science · UNT</strong></div>
+          <div class="idr"><span>Current</span><strong>AI Engineer @ Nexacode</strong></div>
+          <div class="idr"><span>Status</span><strong style="color:var(--g);">F-1 / OPT · Open DFW+Remote</strong></div>
+        </div>
+        <div class="idbars">
+          <div><span class="iblbl">Data Analysis &amp; EDA</span><div class="ibtr" style="--w:92%"><div class="ibf"></div></div></div>
+          <div><span class="iblbl">GenAI / RAG Systems</span><div class="ibtr" style="--w:85%"><div class="ibf"></div></div></div>
+          <div><span class="iblbl">Cloud &amp; MLOps</span><div class="ibtr" style="--w:83%"><div class="ibf"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===================== METRICS ===================== -->
+<section id="metrics">
+<div class="wrap">
+  <div class="stag rev"><i class="fas fa-chart-bar" style="font-size:.68rem;"></i>&nbsp;03 / Live Dashboard</div>
+  <h2 class="stitle rev">Impact in <span class="gt">numbers.</span></h2>
+  <p class="ssub rev" style="margin-bottom:2.2rem;">Real metrics from the resume — not estimates.</p>
+  <div class="bento">
+    <div class="bc bca rev">
+      <div class="bclbl">Domain Distribution<div class="lbdg"><span></span>LIVE</div></div>
+      <canvas id="cDomains"></canvas>
+    </div>
+    <div class="bc bcb rev">
+      <div class="bclbl">Quantified Wins</div>
+      <div class="kpig">
+        <div class="kpib"><div class="kpiv" data-count="40" data-suffix="%">0</div><div class="kpil">ETL Prep Time ↓</div></div>
+        <div class="kpib"><div class="kpiv" data-count="70" data-suffix="%">0</div><div class="kpil">Deploy Failures ↓</div></div>
+        <div class="kpib"><div class="kpiv" data-count="15" data-suffix="min">0</div><div class="kpil">Reproduce Any Run</div></div>
+        <div class="kpib"><div class="kpiv" data-count="60" data-suffix="%">0</div><div class="kpil">Drift MTTR ↓</div></div>
+      </div>
+    </div>
+    <div class="bc bcc rev">
+      <div class="bclbl">BiLSTM vs Baselines</div>
+      <canvas id="cForecast"></canvas>
+    </div>
+    <div class="bc bcd rev">
+      <div class="bclbl">Tooling Frequency · daily use (%)</div>
+      <canvas id="cTools"></canvas>
+    </div>
+    <div class="bc bce rev">
+      <div class="bclbl">Projects by Year</div>
+      <canvas id="cOutput"></canvas>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===================== EXPERIENCE ===================== -->
+<section id="experience">
+<div class="wrap">
+  <div class="stag rev"><i class="fas fa-code-branch" style="font-size:.68rem;"></i>&nbsp;04 / Journey</div>
+  <h2 class="stitle rev">Where I've <span class="gt">shipped.</span></h2>
+  <div class="mstrip rev" style="margin-bottom:2.6rem;">
+    <div class="mbadge"><span class="mv">500K+</span><span class="ml">Records / ETL Run</span></div>
+    <div class="mbadge cool"><span class="mv">3d→4h</span><span class="ml">Deploy Time Cut</span></div>
+    <div class="mbadge warn"><span class="mv">70%</span><span class="ml">Deploy Failures ↓</span></div>
+    <div class="mbadge"><span class="mv">15min</span><span class="ml">Reproduce Any Run</span></div>
+    <div class="mbadge hot"><span class="mv">60%</span><span class="ml">Drift MTTR ↓</span></div>
+  </div>
+  <div class="clog">
+
+    <div class="cm rev">
+      <div class="cmt">
+        <div class="ctd">Mar 2026 → Present</div>
+        <div class="cto">Nexacode · Remote, TX</div>
+      </div>
+      <div class="cmb">
+        <div class="cmc">
+          <div class="chsh">a3f7c2d · main</div>
+          <div class="cht">AI Engineer / Data Analyst — GenAI &amp; ML Pipelines</div>
+          <div class="chs">Nexacode · Remote, TX</div>
+          <ul class="cbl">
+            <li>Built ETL pipelines in Python and SQL processing <span class="mchip">50K–500K+</span> records per run across <span class="mchip">6</span> data sources; standardized feature engineering reduced model prep time by <span class="mchip">40%</span> and eliminated <span class="mchip">3</span> recurring data quality failures.</li>
+            <li>Deployed end-to-end ML pipelines on <strong>AWS</strong> for <span class="mchip">4</span> enterprise analytics clients, reducing model deployment time from <span class="mchip">3d</span> to <span class="mchip">&lt;4h</span> per release cycle.</li>
+            <li>Shipped <span class="mchip">5</span> AI/analytics features with data engineering and product teams, cutting manual reporting by <span class="mchip">35–50%</span>, freeing <span class="mchip">~12hrs</span>/week of analyst time across 2 business units.</li>
+            <li>Containerized <span class="mchip">8</span> inference services with Docker and authored Kubernetes configs, cutting environment-related deployment failures by <span class="mchip">70%</span> and reducing on-call incidents from 6 to under 2/month.</li>
+            <li>Implemented <strong>MLflow</strong> across <span class="mchip">12+</span> active models — experiment tracking, model registry, version tagging — reducing time to reproduce any prior training run from days to <span class="mchip">&lt;15min</span>.</li>
+            <li>Built <strong>CloudWatch</strong> monitoring dashboards tracking prediction drift and latency across <span class="mchip">4</span> production models; automated retraining triggers reduced MTTR from drift events by <span class="mchip">60%</span>, cutting manual intervention to near zero.</li>
+          </ul>
+          <div class="mstrip" style="margin-top:.3rem;margin-bottom:1rem;">
+            <div class="mbadge"><span class="mv">500K+</span><span class="ml">Records / Run</span></div>
+            <div class="mbadge cool"><span class="mv">3d→4h</span><span class="ml">Deploy Time</span></div>
+            <div class="mbadge warn"><span class="mv">70%</span><span class="ml">Deploy Fails ↓</span></div>
+            <div class="mbadge hot"><span class="mv">60%</span><span class="ml">Drift MTTR ↓</span></div>
+          </div>
+          <div class="ctags"><span class="ctag">AWS</span><span class="ctag">Docker</span><span class="ctag">Kubernetes</span><span class="ctag">MLflow</span><span class="ctag">CloudWatch</span><span class="ctag">FastAPI</span><span class="ctag">GenAI</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cm rev">
+      <div class="cmt">
+        <div class="ctd">Summer 2025 → Dec 2025</div>
+        <div class="cto">UNT · Denton, TX</div>
+      </div>
+      <div class="cmb">
+        <div class="cmc">
+          <div class="chsh">8b2e91f · research</div>
+          <div class="cht">Research Assistant — AI/ML &amp; Data Analytics</div>
+          <div class="chs">University of North Texas · Denton, TX</div>
+          <ul class="cbl">
+            <li>Built a stock forecasting platform using <strong>BiLSTM</strong> — sliding window sequences, stacked layers with dropout, benchmarked against plain LSTM and linear regression baselines.</li>
+            <li>Deployed on <strong>AWS EC2 and S3</strong> with a Streamlit frontend so other researchers could run predictions on different tickers without touching the code.</li>
+            <li>Co-authored <em>"Is Accuracy Enough? AI-Powered End-to-End Stock Forecasting System that Becomes a Workflow"</em> (Future Technology, submitted March 2026).</li>
+            <li>Co-authored second paper on teen cybersecurity risk — started as coursework data visualization, became a peer-reviewed publication.</li>
+          </ul>
+          <div class="ctags"><span class="ctag">PyTorch</span><span class="ctag">BiLSTM</span><span class="ctag">AWS EC2/S3</span><span class="ctag">Streamlit</span><span class="ctag">Research</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cm rev">
+      <div class="cmt">
+        <div class="ctd">Jan 2024 → May 2025</div>
+        <div class="cto">UNT · Denton, TX</div>
+      </div>
+      <div class="cmb">
+        <div class="cmc">
+          <div class="chsh">5c4d38a · grad</div>
+          <div class="cht">Graduate Studies + Independent Projects</div>
+          <div class="chs">University of North Texas · Denton, TX</div>
+          <ul class="cbl">
+            <li>M.S. Data Science: machine learning, deep learning, NLP, cloud infrastructure, statistical modeling, data visualization.</li>
+            <li>Built <strong>Stock Predictor</strong> (XGBoost + Streamlit), <strong>PatientSimRAG</strong> (ClinicalBERT on 1M+ Synthea EHR records), and <strong>Teen Cybersecurity</strong> analysis (67,921 records → published paper).</li>
+          </ul>
+          <div class="ctags"><span class="ctag">XGBoost</span><span class="ctag">ClinicalBERT</span><span class="ctag">Synthea EHR</span><span class="ctag">M.S. Data Science</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cm rev">
+      <div class="cmt">
+        <div class="ctd">Feb 2021 → Jan 2024</div>
+        <div class="cto">Accenture · Hyderabad</div>
+      </div>
+      <div class="cmb">
+        <div class="cmc">
+          <div class="chsh">2a9f04c · enterprise</div>
+          <div class="cht">Software Engineer Associate — DevOps / Data Automation</div>
+          <div class="chs">Accenture · Hyderabad, India</div>
+          <ul class="cbl">
+            <li>Managed CI/CD pipelines for <strong>Pfizer</strong> and <strong>Bank of America</strong> across dev, staging, and production — release gating, config management, environment-specific deployments.</li>
+            <li>Automated business process workflows on <strong>Appian BPM</strong> for enterprise clients, cutting manual turnaround time by <span class="mchip">~35%</span> on the processes we touched.</li>
+            <li>Root cause analysis on production incidents — wrote fixes, documented post-mortems, brought down recurring failure rates on critical workflows.</li>
+            <li>Found and fixed pipeline bottlenecks on high-volume workflow execution paths by profiling and reprofiling latency sources.</li>
+          </ul>
+          <div class="ctags"><span class="ctag">Appian BPM</span><span class="ctag">CI/CD</span><span class="ctag">Pfizer</span><span class="ctag">Bank of America</span><span class="ctag">RCA</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===================== SKILLS ===================== -->
+<section id="skills">
+<div class="wrap">
+  <div class="stag rev"><i class="fas fa-layer-group" style="font-size:.68rem;"></i>&nbsp;05 / Skills</div>
+  <h2 class="stitle rev">The <span class="gt">toolkit</span>, visualized.</h2>
+  <div class="sklayout" style="margin-top:2.5rem;">
+    <div>
+      <div class="rwrap rev">
+        <div class="rlbl">Capability Radar · 6 axes</div>
+        <canvas id="cRadar"></canvas>
+      </div>
+    </div>
+    <div class="skrc">
+      <!-- 3 skill groups from v4 resume -->
+      <div class="skg rev">
+        <div class="sgh"><div class="sgic"><i class="fas fa-database"></i></div><div class="sgn">Data &amp; Analytics</div></div>
+        <div class="sgbw"><div class="sgbl"><span>Python · SQL · Pandas · NumPy · EDA · Hypothesis Testing · Tableau · Streamlit</span><span class="sgbp">92%</span></div><div class="sgb"><div class="sgbf" data-w="92"></div></div></div>
+        <div class="sgtags"><span class="sgt">Python</span><span class="sgt">SQL</span><span class="sgt">Pandas</span><span class="sgt">NumPy</span><span class="sgt">EDA</span><span class="sgt">Hypothesis Testing</span><span class="sgt">Tableau</span><span class="sgt">Streamlit</span><span class="sgt">Matplotlib</span><span class="sgt">Seaborn</span></div>
+      </div>
+      <div class="skg rev">
+        <div class="sgh"><div class="sgic"><i class="fas fa-brain"></i></div><div class="sgn">AI / ML &amp; GenAI</div></div>
+        <div class="sgbw"><div class="sgbl"><span>PyTorch · XGBoost · HuggingFace · LangChain · FAISS · RAG · MLflow</span><span class="sgbp">86%</span></div><div class="sgb"><div class="sgbf" data-w="86"></div></div></div>
+        <div class="sgtags"><span class="sgt">PyTorch</span><span class="sgt">Scikit-learn</span><span class="sgt">XGBoost</span><span class="sgt">HuggingFace</span><span class="sgt">LangChain</span><span class="sgt">FAISS</span><span class="sgt">RAG Pipelines</span><span class="sgt">MLflow</span><span class="sgt">BiLSTM</span><span class="sgt">ClinicalBERT</span></div>
+      </div>
+      <div class="skg rev">
+        <div class="sgh"><div class="sgic"><i class="fab fa-aws"></i></div><div class="sgn">Cloud &amp; Engineering</div></div>
+        <div class="sgbw"><div class="sgbl"><span>AWS (EC2, S3, Lambda) · Docker · Kubernetes · FastAPI · PostgreSQL · GitHub Actions</span><span class="sgbp">82%</span></div><div class="sgb"><div class="sgbf" data-w="82"></div></div></div>
+        <div class="sgtags"><span class="sgt">AWS EC2/S3/Lambda</span><span class="sgt">Docker</span><span class="sgt">Kubernetes</span><span class="sgt">FastAPI</span><span class="sgt">PostgreSQL</span><span class="sgt">GitHub Actions</span><span class="sgt">Prometheus</span><span class="sgt">Grafana</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="crts">
+    <div class="crtc rev"><div class="crtic"><i class="fas fa-graduation-cap"></i></div><div class="crtn">Chat with Your Data: GenAI SQL Analysis</div><div class="crtd">Vanderbilt University / Coursera · Apr 2026</div></div>
+  </div>
+</div>
+</section>
+
+<!-- ===================== PROJECTS ===================== -->
+<section id="projects">
+<div class="wrap">
+  <div class="stag rev"><i class="fas fa-folder-open" style="font-size:.68rem;"></i>&nbsp;06 / Projects</div>
+  <h2 class="stitle rev">Selected <span class="gt">work.</span></h2>
+  <p class="ssub rev" style="margin-bottom:1.8rem;">Asymmetric grid — sized by impact. Filter by domain.</p>
+  <div class="frow">
+    <button class="fb on" data-f="all">All</button>
+    <button class="fb" data-f="ml">ML / Forecasting</button>
+    <button class="fb" data-f="genai">GenAI / RAG</button>
+    <button class="fb" data-f="viz">Analytics / Viz</button>
+    <button class="fb" data-f="mlops">Cloud / MLOps</button>
+  </div>
+  <div class="mgrid">
+
+    <article class="pc pc1 rev" data-t="ml viz">
+      <div class="pcac pcac1"></div>
+      <div class="pch"><div class="pcic"><i class="fas fa-chart-line"></i></div><div class="pcd">Analytics · Forecasting</div></div>
+      <h3>Stock Price Predictor</h3>
+      <p>Trained a <strong>MultiOutputRegressor (XGBoost)</strong> to predict next-day Open, Close, High, Low for <span class="mchip">4</span> tickers (Apple, GM, Nestle, Walmart) using NASDAQ historical data. <code>shuffle=False</code> splits prevent leakage. Streamlit app loads per-company models — codebase behind the published paper.</p>
+      <div class="pcm"><div><div class="pcmv">4</div><div class="pcml">Tickers</div></div><div><div class="pcmv">OHLCV</div><div class="pcml">Multi-Output</div></div></div>
+      <div class="pct"><span class="pctt">XGBoost</span><span class="pctt">Scikit-learn</span><span class="pctt">Streamlit</span><span class="pctt">Pandas</span></div>
+    </article>
+
+    <article class="pc pc2 rev" data-t="ml genai">
+      <div class="pcac pcac2"></div>
+      <div class="pch"><div class="pcic"><i class="fas fa-hospital-user"></i></div><div class="pcd">Healthcare · Similarity / RAG</div></div>
+      <h3>PatientSimRAG — Patient Similarity &amp; AI Analytics Engine</h3>
+      <p>Two parallel similarity pipelines on <span class="mchip">1M+</span> Synthea EHR records — ClinicalBERT semantic embeddings on condition text + TF-IDF plus one-hot demographics. Both produce cosine similarity matrices. Streamlit app with 3-tab interface: patient overview, Top-K ranked similar patients with CSV export, and demographic visualizations.</p>
+      <div class="pcm"><div><div class="pcmv">1M+</div><div class="pcml">EHR Records</div></div><div><div class="pcmv">Top-K</div><div class="pcml">Retrieval</div></div></div>
+      <div class="pct"><span class="pctt">ClinicalBERT</span><span class="pctt">TF-IDF</span><span class="pctt">Scikit-learn</span><span class="pctt">Streamlit</span><span class="pctt">RAG</span></div>
+    </article>
+
+    <article class="pc pc3 rev" data-t="viz">
+      <div class="pcac pcac3"></div>
+      <div class="pch"><div class="pcic"><i class="fas fa-shield-halved"></i></div><div class="pcd">Security · Analytics · Research</div></div>
+      <h3>Teen Cybersecurity Risk Analysis</h3>
+      <p>EDA and hypothesis testing on <span class="mchip">67,921</span> teen records across 30 attributes. Key finding: mobile had <span class="mchip">4×</span> more malware than desktop. Fed directly into the co-authored paper.</p>
+      <div class="pcm"><div><div class="pcmv">67K+</div><div class="pcml">Records</div></div><div><div class="pcmv">4×</div><div class="pcml">Mobile Risk</div></div></div>
+      <div class="pct"><span class="pctt">Python</span><span class="pctt">Pandas</span><span class="pctt">Seaborn</span><span class="pctt">Tableau</span></div>
+    </article>
+
+    <article class="pc pc4 rev" data-t="genai mlops">
+      <div class="pcac pcac4"></div>
+      <div class="pch"><div class="pcic"><i class="fas fa-file-magnifying-glass"></i></div><div class="pcd">Production RAG</div></div>
+      <h3>AI Document Assistant</h3>
+      <p>RAG Q&amp;A over <span class="mchip">500+</span> docs. Chunking + FAISS + FastAPI + source citations. Targeting <span class="mchip">&lt;2s</span> response and <span class="mchip">&gt;85%</span> retrieval precision on a 50-question eval set.</p>
+      <div class="pcm"><div><div class="pcmv">500+</div><div class="pcml">Docs</div></div><div><div class="pcmv">&lt;2s</div><div class="pcml">Response</div></div></div>
+      <div class="pct"><span class="pctt">LangChain</span><span class="pctt">FAISS</span><span class="pctt">FastAPI</span><span class="pctt">Docker</span></div>
+    </article>
+
+    <article class="pc pc5 rev" data-t="viz genai">
+      <div class="pcac pcac5"></div>
+      <div class="pch"><div class="pcic"><i class="fas fa-comments"></i></div><div class="pcd">NLP · Dashboard</div></div>
+      <h3>Customer Feedback Intelligence</h3>
+      <p><span class="mchip">10K+</span> reviews, HuggingFace transformer sentiment classification, <span class="mchip">&gt;90%</span> accuracy target. <strong>Tableau</strong> dashboard showing sentiment trends by category, top negative drivers as concrete recommendations.</p>
+      <div class="pcm"><div><div class="pcmv">10K+</div><div class="pcml">Reviews</div></div><div><div class="pcmv">&gt;90%</div><div class="pcml">Target Acc.</div></div></div>
+      <div class="pct"><span class="pctt">HuggingFace</span><span class="pctt">Tableau</span><span class="pctt">SQL</span><span class="pctt">Pandas</span></div>
+    </article>
+
+    <article class="pc pc6 rev" data-t="ml mlops">
+      <div class="pcac pcac6"></div>
+      <div class="pch"><div class="pcic"><i class="fas fa-gauge-high"></i></div><div class="pcd">Forecasting · Drift Monitoring</div></div>
+      <h3>Real-Time Sales Forecast Monitor</h3>
+      <p>Extending the BiLSTM forecasting project with a full monitoring layer — scheduled retraining, <strong>MLflow</strong> logging RMSE/MAE per run, and a <strong>Grafana</strong> dashboard tracking forecast error and drift, with an alert when error exceeds <span class="mchip">~10%</span>.</p>
+      <div class="pcm"><div><div class="pcmv">~10%</div><div class="pcml">Drift Alert</div></div><div><div class="pcmv">RMSE/MAE</div><div class="pcml">Per-Run Log</div></div><div><div class="pcmv">Auto</div><div class="pcml">Retrain</div></div></div>
+      <div class="pct"><span class="pctt">PyTorch</span><span class="pctt">MLflow</span><span class="pctt">Prometheus</span><span class="pctt">Grafana</span></div>
+    </article>
+  </div>
+
+  <!-- Publications -->
+  <div class="pubsec rev">
+    <div class="stag" style="margin-bottom:1rem;"><i class="fas fa-file-alt" style="font-size:.68rem;"></i>&nbsp;Research Publications</div>
+    <h2 class="stitle" style="font-size:clamp(1.4rem,3vw,2.1rem);margin-bottom:1.8rem;">Co-authored <span class="gt">papers.</span></h2>
+    <div class="pubs">
+      <div class="pub">
+        <div class="pnum">[1]</div>
+        <div class="pbdy">
+          <div class="ptit">"Is Accuracy Enough? AI-Powered End-to-End Stock Forecasting System that Becomes a Workflow"</div>
+          <div class="pau">Sriram, K., Mohammed, Y., Sundarrajan, I. P., &amp; Hossain, G.</div>
+          <div class="pven">Future Technology, Future Publishing LLC — submitted March 2026, under review</div>
+        </div>
+        <div class="pbdg bdgr">Under Review</div>
+      </div>
+      <div class="pub">
+        <div class="pnum">[2]</div>
+        <div class="pbdy">
+          <div class="ptit">"Are Teens Safe Online? Exploring Cyber Threat Exposure and Solutions for High School Students"</div>
+          <div class="pau">Sriram, K., Hossain, G. (Assoc. Prof., UNT) &amp; Shin, M. (Asst. Prof., Illinois State Univ.)</div>
+          <div class="pven">2025–2026</div>
+        </div>
+        <div class="pbdg bdgp">Published</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===================== CONTACT ===================== -->
+<section id="contact">
+<div class="wrap">
+  <div class="ctsplit">
+    <div class="ctl">
+      <div class="stag rev"><i class="fas fa-paper-plane" style="font-size:.68rem;"></i>&nbsp;07 / Contact</div>
+      <h2 class="stitle rev">Let's build something<br><span class="gt">that ships.</span></h2>
+      <p class="rev">Open to full-time Data &amp; AI Analyst / AI Engineer roles — DFW area and remote. F-1/OPT eligible.</p>
+      <a href="mailto:koushikzlitx@gmail.com" class="btn bgrd rev" style="display:inline-flex;"><span>Start a conversation</span><i class="fas fa-paper-plane"></i></a>
+    </div>
+    <div class="ctr rev">
+      <a href="mailto:koushikzlitx@gmail.com" class="ctile"><div class="ctico"><i class="fas fa-envelope"></i></div><div><div class="ctlbl">Email</div><div class="ctval">koushikzlitx@gmail.com</div></div><i class="fas fa-arrow-up-right-from-square ctarr"></i></a>
+      <a href="tel:6828888396" class="ctile"><div class="ctico"><i class="fas fa-phone"></i></div><div><div class="ctlbl">Phone</div><div class="ctval">(682) 888-8396</div></div><i class="fas fa-arrow-up-right-from-square ctarr"></i></a>
+      <a href="https://linkedin.com/in/koushik-sriram-184276182" target="_blank" class="ctile"><div class="ctico"><i class="fab fa-linkedin-in"></i></div><div><div class="ctlbl">LinkedIn</div><div class="ctval">/in/koushik-sriram</div></div><i class="fas fa-arrow-up-right-from-square ctarr"></i></a>
+      <a href="https://github.com/YOUR_USERNAME" target="_blank" class="ctile"><div class="ctico"><i class="fab fa-github"></i></div><div><div class="ctlbl">GitHub</div><div class="ctval">YOUR_USERNAME</div></div><i class="fas fa-arrow-up-right-from-square ctarr"></i></a>
+    </div>
+  </div>
+</div>
+</section>
+
+<footer>
+<div class="wrap">
+  <div class="fi">
+    <div class="fbr"><strong>&lt;KS/&gt;</strong> · Data &amp; AI Analyst | AI Engineer · Denton, TX · 2026</div>
+    <div class="fsc">
+      <a href="https://linkedin.com/in/koushik-sriram-184276182" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+      <a href="https://github.com/YOUR_USERNAME" target="_blank"><i class="fab fa-github"></i></a>
+      <a href="mailto:koushikzlitx@gmail.com"><i class="fas fa-envelope"></i></a>
+    </div>
+  </div>
+</div>
+</footer>
+
+<script>
+/* CURSOR */
+const cd=document.querySelector('.cd'),cr=document.getElementById('cr');
+let rx=0,ry=0,mx=0,my=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cd.style.transform=`translate(${mx}px,${my}px) translate(-50%,-50%)`;});
+(function loop(){rx+=(mx-rx)*.18;ry+=(my-ry)*.18;cr.style.transform=`translate(${rx}px,${ry}px) translate(-50%,-50%)`;requestAnimationFrame(loop);})();
+document.querySelectorAll('a,button,.pc,.bc,.cmc,.ctile,.skg,.crtc').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cr.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>cr.classList.remove('hov'));
+});
+
+/* SCROLL BAR + NAV */
+const sbar=document.getElementById('sbar'),nav=document.getElementById('nav');
+const secs=[...document.querySelectorAll('section[id]')],links=[...document.querySelectorAll('.nl a')];
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  sbar.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+  nav.classList.toggle('sc',h.scrollTop>60);
+  let cur='';secs.forEach(s=>{if(h.scrollTop+140>=s.offsetTop)cur=s.id;});
+  links.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+cur));
+},{passive:true});
+
+/* MOBILE NAV */
+const hm=document.getElementById('hm'),nl=document.getElementById('nl');
+hm.addEventListener('click',()=>nl.classList.toggle('open'));
+links.forEach(l=>l.addEventListener('click',()=>nl.classList.remove('open')));
+
+/* TYPED */
+(()=>{
+  const el=document.getElementById('typed');
+  const roles=['Data & AI Analyst','AI Engineer'];
+  let r=0,i=0,del=false;
+  function tick(){
+    el.textContent=roles[r].slice(0,i);
+    if(!del&&i<roles[r].length){i++;setTimeout(tick,68);}
+    else if(del&&i>0){i--;setTimeout(tick,28);}
+    else{if(!del){del=true;setTimeout(tick,1500);}else{del=false;r=(r+1)%roles.length;setTimeout(tick,180);}}
+  }tick();
+})();
+
+/* COUNT UP */
+(()=>{
+  function cu(el){
+    const t=parseInt(el.dataset.count),s=el.dataset.suffix||'',d=1500,st=performance.now();
+    (function f(n){const p=Math.min((n-st)/d,1),e=1-Math.pow(1-p,3);el.textContent=Math.floor(e*t)+s;if(p<1)requestAnimationFrame(f);})(performance.now());
+  }
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){cu(e.target);io.unobserve(e.target);}}),{threshold:.5});
+  document.querySelectorAll('[data-count]').forEach(el=>io.observe(el));
+})();
+
+/* REVEAL */
+const io2=new IntersectionObserver(es=>es.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*50);io2.unobserve(e.target);}}),{threshold:.09});
+document.querySelectorAll('.rev').forEach(el=>io2.observe(el));
+
+/* ID BARS */
+const io3=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('go');io3.unobserve(e.target);}}),{threshold:.4});
+document.querySelectorAll('.ibtr').forEach(el=>io3.observe(el));
+
+/* SKILL BARS */
+const io4=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.style.width=e.target.dataset.w+'%';io4.unobserve(e.target);}}),{threshold:.4});
+document.querySelectorAll('.sgbf').forEach(el=>io4.observe(el));
+
+/* MOUSE GLOW */
+document.querySelectorAll('.bc,.pc,.cmc,.ctile').forEach(c=>{
+  c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');c.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');});
+});
+
+/* PROJECT FILTER */
+document.querySelectorAll('.fb').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.fb').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+    const f=b.dataset.f;
+    document.querySelectorAll('.pc').forEach(c=>{c.classList.toggle('hide',!(f==='all'||(c.dataset.t||'').split(' ').includes(f)));});
+  });
+});
+
+/* CHARTS */
+window.addEventListener('load',()=>{
+  if(typeof Chart==='undefined')return;
+  Chart.defaults.color='#9090b4';
+  Chart.defaults.borderColor='rgba(255,255,255,0.05)';
+  Chart.defaults.font.family="'Inter',sans-serif";
+
+  const gH=ctx=>{const g=ctx.createLinearGradient(0,0,500,0);g.addColorStop(0,'#7c5cff');g.addColorStop(1,'#22d3ee');return g;};
+  const gV=(ctx,a,b)=>{const g=ctx.createLinearGradient(0,0,0,260);g.addColorStop(0,a);g.addColorStop(1,b);return g;};
+
+  /* 1. Domain doughnut — 3 skill groups from v4 resume */
+  const c1=document.getElementById('cDomains');
+  if(c1)new Chart(c1,{type:'doughnut',data:{
+    labels:['Data & Analytics','AI / ML & GenAI','Cloud & Engineering'],
+    datasets:[{data:[38,35,27],backgroundColor:['#7c5cff','#22d3ee','#f472b6'],borderColor:'rgba(5,5,8,.9)',borderWidth:3,hoverOffset:14}]
+  },options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{padding:14,boxWidth:10,usePointStyle:true,font:{size:11}}},tooltip:{backgroundColor:'rgba(5,5,8,.95)',padding:10,borderColor:'rgba(124,92,255,.3)',borderWidth:1,callbacks:{label:c=>` ${c.label}: ${c.raw}%`}}},animation:{animateRotate:true,duration:1600}}});
+
+  /* 2. BiLSTM vs baselines */
+  const c2=document.getElementById('cForecast');
+  if(c2){const ctx=c2.getContext('2d');new Chart(c2,{type:'bar',data:{
+    labels:['Linear Reg','LSTM','BiLSTM'],
+    datasets:[{data:[74,84,91],backgroundColor:['rgba(150,150,180,.4)','rgba(124,92,255,.6)','#22d3ee'],borderRadius:9,borderSkipped:false}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:60,max:100,grid:{color:'rgba(255,255,255,.04)'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}},animation:{duration:1400}}});}
+
+  /* 3. Tools horizontal bar — v4 resume stack */
+  const c3=document.getElementById('cTools');
+  if(c3){const ctx=c3.getContext('2d');new Chart(c3,{type:'bar',data:{
+    labels:['Python','SQL','Tableau','AWS','LangChain','PyTorch','MLflow','Docker'],
+    datasets:[{data:[92,88,86,82,80,85,78,80],backgroundColor:gH(ctx),borderRadius:7,barThickness:15}]
+  },options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{max:100,grid:{color:'rgba(255,255,255,.04)'},ticks:{font:{size:10},callback:v=>v+'%'}},y:{grid:{display:false},ticks:{font:{size:11}}}}}});}
+
+  /* 4. Output by year */
+  const c4=document.getElementById('cOutput');
+  if(c4){const ctx=c4.getContext('2d');new Chart(c4,{type:'bar',data:{
+    labels:['2023','2024','2025','2026'],
+    datasets:[{data:[1,2,3,4],backgroundColor:gV(ctx,'rgba(244,114,182,.9)','rgba(124,92,255,.4)'),borderRadius:8,borderWidth:0}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{stepSize:1,font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}});}
+
+  /* 5. Radar — 3 skill groups + sub-axes */
+  const c5=document.getElementById('cRadar');
+  if(c5)new Chart(c5,{type:'radar',data:{
+    labels:['Python / SQL / EDA','Tableau / Streamlit','PyTorch / XGBoost','LangChain / RAG','AWS / Docker / K8s','MLflow / Monitoring'],
+    datasets:[
+      {label:'Current',data:[92,88,86,82,83,78],borderColor:'#22d3ee',backgroundColor:'rgba(34,211,238,.15)',borderWidth:2,pointBackgroundColor:'#22d3ee',pointBorderColor:'#fff',pointRadius:4},
+      {label:'Target',data:[96,92,90,90,90,88],borderColor:'#f472b6',backgroundColor:'rgba(244,114,182,.08)',borderDash:[6,4],borderWidth:1.5,pointRadius:2,pointBackgroundColor:'#f472b6'}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:12,boxWidth:9,usePointStyle:true,font:{size:10}}}},scales:{r:{angleLines:{color:'rgba(255,255,255,.07)'},grid:{color:'rgba(255,255,255,.05)'},pointLabels:{color:'#ededfa',font:{size:9.5,weight:'500'}},ticks:{display:false},min:0,max:100}}}});
+});
+</script>
+</body>
+</html>
